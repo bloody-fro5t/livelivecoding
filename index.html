@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Livelivecoding.tv</title>
+
+</head>
+
+<body>
+
+    Loading...
+
+
+    <script>
+        var AJAX = function() {
+
+        };
+        AJAX.prototype.get = function(url, callbackAfter) {
+            var xmlhttp = new XMLHttpRequest();
+
+            xmlhttp.onreadystatechange = function() {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    callbackAfter(xmlhttp);
+                }
+            }
+            xmlhttp.open("GET", url, true);
+            xmlhttp.setRequestHeader("Accept", "application/json, text/plain, */*");
+
+            xmlhttp.send();
+        };
+
+        var req = new AJAX();
+
+        function loadLivecoding() {
+            req.get("https://www.livecoding.tv/livestreams/", function(response) {
+                document.querySelector('html').innerHTML = response.responseText
+                .replace(/src=\"\/\/cdn/g, "src=\"https://cdn")
+                .replace(/src=\"\//g, "src=\"http://livecoding.tv/")
+                .replace(/href=\"\//g, "href=\"http://livecoding.tv/");
+
+            });
+        }
+        loadLivecoding();
+        setInterval(loadLivecoding, 60000);//reload livecoding every 60 seconds.
+    </script>
+
+
+
+
+</body>
+
+</html>
